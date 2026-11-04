@@ -1,0 +1,30 @@
+﻿@model KayuSushi.Models.Categorie
+
+@{
+    ViewData["Title"] = "Ajouter une cat�gorie";
+}
+
+<h1>Ajouter une cat�gorie</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="NomCategorie" class="control-label"></label>
+        <input asp-for="NomCategorie" class="form-control" />
+        <span asp-validation-for="NomCategorie" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

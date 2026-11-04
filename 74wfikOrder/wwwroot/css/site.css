@@ -1,0 +1,329 @@
+/* -----------------------------
+   THEME VARIABLES (LIGHT/DARK)
+----------------------------- */
+:root {
+    /* Brand Colors (Japanese Theme) */
+    --primary: #c1121f; /* Crimson Red */
+    --primary-dark: #780000; /* Deep Red */
+    --primary-rgb: 193, 18, 31;
+    --green: #2d6a4f; /* Matcha Green */
+    --green-dark: #1b4332;
+    --danger: #d90429;
+    
+    /* Light Theme (Default) */
+    --bg-anim-1: #f8fafc;
+    --bg-anim-2: #f1f5f9;
+    --bg-anim-3: #ffffff;
+    
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+    
+    --bg-overlay: rgba(255, 255, 255, 0.85);
+    
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    
+    --input-bg: #ffffff;
+    --input-border: #cbd5e1;
+    --input-text: #0f172a;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --bg-anim-1: #0f172a;
+    --bg-anim-2: #1e1b4b;
+    --bg-anim-3: #020617;
+    
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+    
+    --bg-overlay: rgba(15, 23, 42, 0.85);
+    
+    --glass-bg: rgba(15, 23, 42, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+    
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    
+    --input-bg: #0f172a;
+    --input-border: #334155;
+    --input-text: #f8fafc;
+}
+
+/* -----------------------------
+   GLOBAL RESET & THEME AWARENESS
+----------------------------- */
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text-main) !important;
+    font-family: "Outfit", system-ui, sans-serif;
+    background-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    transition: background 0.3s ease, color 0.3s ease;
+    position: relative;
+    z-index: 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-overlay);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: -1;
+    transition: background 0.3s ease;
+}
+
+/* Force text visibility for Bootstrap classes */
+.text-dark, .text-black, .navbar-light .navbar-nav .nav-link {
+    color: var(--text-main) !important;
+}
+
+.text-muted, .text-secondary {
+    color: var(--text-muted) !important;
+}
+
+h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4 {
+    color: var(--text-main) !important;
+    font-family: "Noto Serif JP", serif;
+    font-weight: 700;
+}
+
+/* -----------------------------
+   COMPONENTS
+----------------------------- */
+.glass-navbar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.page-card, .card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+}
+
+/* Aggressive Table Styling for Dark Mode */
+.table {
+    color: var(--text-main) !important;
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-main);
+    --bs-table-border-color: var(--border-color);
+}
+
+.table thead th {
+    background: rgba(var(--primary-rgb), 0.1) !important;
+    color: var(--primary) !important;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--primary) !important;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+[data-theme="light"] .table-striped tbody tr:nth-of-type(odd) {
+    background: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* -----------------------------
+   FORMS & INPUTS
+----------------------------- */
+.form-control, .form-select {
+    background-color: var(--input-bg) !important;
+    color: var(--input-text) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 12px;
+}
+
+.form-control:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.2) !important;
+}
+
+/* Buttons */
+.btn-primary { background: var(--primary); border: none; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+.btn-info { background: #0ea5e9; color: white !important; border: none; }
+.btn-warning { background: #f59e0b; color: white !important; border: none; }
+.btn-danger { background: #ef4444; color: white !important; border: none; }
+
+/* -----------------------------
+   ANIMATIONS & UTILS
+----------------------------- */
+/* Removed gradientBG animation */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* -----------------------------
+   NAVIGATION & BRANDING
+----------------------------- */
+.brand-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #fff;
+    padding: 2px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 900;
+    color: var(--text-main) !important;
+    font-size: 1.3rem;
+    letter-spacing: -0.5px;
+}
+
+.nav-pill {
+    color: var(--text-main) !important;
+    font-weight: 700;
+    padding: 10px 18px !important;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-pill:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary) !important;
+}
+
+.theme-toggle {
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(15deg);
+}
+
+.user-badge {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px;
+    font-weight: 700;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(232, 93, 4, 0.3);
+}
+
+.btn-success {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.btn-success:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* -----------------------------
+   PRINT STYLES
+----------------------------- */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .print-receipt, .print-receipt * {
+        visibility: visible;
+        color: #000 !important;
+    }
+    .print-receipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        box-shadow: none !important;
+        border: none !important;
+        background: none !important;
+    }
+    .no-print {
+        display: none !important;
+    }
+}

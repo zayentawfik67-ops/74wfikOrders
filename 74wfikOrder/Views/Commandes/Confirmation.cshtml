@@ -1,0 +1,94 @@
+﻿@model KayuSushi.Models.Commande
+
+@{
+    ViewData["Title"] = "Commande confirmée";
+}
+
+<div class="page-card p-5 text-center">
+    <div class="mb-4">
+        <span class="badge rounded-pill bg-success px-4 py-2 fs-6">
+            Commande validée
+        </span>
+    </div>
+
+    <h1 class="fw-bold display-5 mb-3">
+        Merci pour votre commande !
+    </h1>
+
+    <p class="lead text-muted">
+        Votre commande a été enregistrée avec succès.
+        Le paiement n’est pas inclus dans cette version de l’application.
+    </p>
+
+    <div class="card border-0 shadow-sm my-4 mx-auto" style="max-width: 520px;">
+        <div class="card-body">
+            <h4 class="fw-bold">Commande #@Model.IdCommande</h4>
+
+            <p class="text-muted mb-2">
+                Date : @Model.DateCommande.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+            <p class="mb-2">
+                Statut :
+                <strong>@Model.Statut</strong>
+            </p>
+
+            <p class="fs-4 text-success fw-bold mb-0">
+                Total : @Model.Total.ToString("0.000") DT
+            </p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm my-4 mx-auto print-receipt" style="max-width: 520px; text-align: left;">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Détails de livraison</h5>
+            
+            <p class="mb-1">
+                <strong>Adresse :</strong> @Model.AdresseLivraison, @Model.VilleLivraison
+            </p>
+            <p class="mb-1">
+                <strong>Téléphone :</strong> @Model.TelephoneLivraison
+            </p>
+            @if (!string.IsNullOrEmpty(Model.Remarques))
+            {
+                <p class="mb-0">
+                    <strong>Remarques :</strong> @Model.Remarques
+                </p>
+            }
+            <hr class="my-3"/>
+            <p class="fs-4 text-success fw-bold mb-0 text-center">
+                Total payé : @Model.Total.ToString("0.000") DT
+            </p>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap no-print">
+        <a asp-controller="Menu" asp-action="Index" class="btn btn-primary">
+            Retour au menu
+        </a>
+
+        <button onclick="window.print()" class="btn btn-dark">
+            <i class="bi bi-printer"></i> Imprimer le reçu
+        </button>
+
+        <a asp-controller="Commandes"
+           asp-action="Tracking"
+           asp-route-id="@Model.IdCommande"
+           class="btn btn-info text-white">
+            Suivre la commande
+        </a>
+
+        <a asp-controller="Commandes"
+           asp-action="Details"
+           asp-route-id="@Model.IdCommande"
+           class="btn btn-outline-success">
+            Voir détails
+        </a>
+
+        <a asp-controller="Commandes"
+           asp-action="MesCommandes"
+           class="btn btn-outline-secondary">
+            Mes commandes
+        </a>
+    </div>
+</div>

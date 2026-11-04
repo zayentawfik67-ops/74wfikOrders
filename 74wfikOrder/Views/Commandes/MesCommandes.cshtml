@@ -1,0 +1,77 @@
+﻿@model IEnumerable<KayuSushi.Models.Commande>
+
+@{
+    ViewData["Title"] = "Mes commandes";
+}
+
+<div class="page-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Mes commandes</h1>
+            <p class="text-muted mb-0">Consultez l’historique de vos commandes.</p>
+        </div>
+
+        <a asp-controller="Menu" asp-action="Index" class="btn btn-primary">
+            Retour au menu
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Vous n’avez pas encore passé de commande.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var commande in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h4 class="fw-bold">Commande #@commande.IdCommande</h4>
+                                <span class="badge bg-warning text-dark">
+                                    @commande.Statut
+                                </span>
+                            </div>
+
+                            <p class="text-muted">
+                                @commande.DateCommande.ToString("dd/MM/yyyy HH:mm")
+                            </p>
+
+                            <p>
+                                Articles :
+                                <strong>@commande.LignesCommande.Sum(l => l.Quantite)</strong>
+                            </p>
+
+                            <p>
+                                Total :
+                                <strong class="text-success">
+                                    @commande.Total.ToString("0.000") DT
+                                </strong>
+                            </p>
+
+                            <div class="d-flex gap-2">
+                                @if (commande.Statut != "Livrée" && commande.Statut != "Annulée")
+                                {
+                                    <a asp-action="Tracking"
+                                       asp-route-id="@commande.IdCommande"
+                                       class="btn btn-info text-white flex-grow-1">
+                                        <i class="bi bi-geo-alt"></i> Suivre
+                                    </a>
+                                }
+                                <a asp-action="Details"
+                                   asp-route-id="@commande.IdCommande"
+                                   class="btn btn-outline-primary flex-grow-1">
+                                    Voir détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

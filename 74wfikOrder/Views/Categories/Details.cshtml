@@ -1,0 +1,19 @@
+﻿@model KayuSushi.Models.Categorie
+
+@{
+    ViewData["Title"] = "D�tails cat�gorie";
+}
+
+<h1>D�tails cat�gorie</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.NomCategorie</h4>
+        <p class="card-text">@Model.Description</p>
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Edit" asp-route-id="@Model.IdCategorie" class="btn btn-warning">Modifier</a>
+<a asp-action="Index" class="btn btn-secondary">Retour</a>

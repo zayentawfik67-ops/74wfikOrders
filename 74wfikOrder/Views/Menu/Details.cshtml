@@ -1,0 +1,35 @@
+﻿@model KayuSushi.Models.Article
+
+@{
+    ViewData["Title"] = "D�tails article";
+}
+
+<h1>D�tails article</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h3>@Model.NomArticle</h3>
+
+        <p>@Model.Description</p>
+
+        <p>
+            <strong>Cat�gorie :</strong> @Model.Categorie?.NomCategorie
+        </p>
+
+        <p>
+            <strong>Prix :</strong> @Model.Prix DT
+        </p>
+
+        <p>
+            <strong>Disponible :</strong> @(Model.Disponible ? "Oui" : "Non")
+        </p>
+
+        <a asp-controller="Panier" asp-action="Ajouter" asp-route-id="@Model.IdArticle" class="btn btn-success">
+            Ajouter au panier
+        </a>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Retour au menu
+        </a>
+    </div>
+</div>

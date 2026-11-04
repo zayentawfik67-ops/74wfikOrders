@@ -1,0 +1,61 @@
+﻿@model IEnumerable<KayuSushi.Models.Ingredient>
+
+@{
+    ViewData["Title"] = "Gestion des Stocks";
+}
+
+<div class="page-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">État des Stocks</h1>
+            <p class="text-muted mb-0">Suivez l'inventaire des ingrédients en temps réel.</p>
+        </div>
+        <div>
+            <a asp-action="CommandesFournisseur" class="btn btn-outline-primary me-2">
+                <i class="bi bi-truck"></i> Commandes Fournisseurs
+            </a>
+            <a asp-controller="Home" asp-action="Admin" class="btn btn-outline-secondary">
+                Retour dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Ingrédient</th>
+                    <th>Fournisseur par défaut</th>
+                    <th>Stock Actuel</th>
+                    <th>Seuil d'Alerte</th>
+                    <th>État</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.Nom</td>
+                        <td>@item.FournisseurDefaut?.Nom</td>
+                        <td>
+                            <strong class="fs-5 @(item.StockActuel <= item.SeuilAlerte ? "text-danger" : "text-success")">
+                                @item.StockActuel.ToString("0.##") @item.Unite
+                            </strong>
+                        </td>
+                        <td>@item.SeuilAlerte.ToString("0.##") @item.Unite</td>
+                        <td>
+                            @if (item.StockActuel <= item.SeuilAlerte)
+                            {
+                                <span class="badge bg-danger"><i class="bi bi-exclamation-triangle"></i> Rupture imminente</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> En stock</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

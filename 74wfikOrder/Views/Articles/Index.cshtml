@@ -1,0 +1,55 @@
+﻿@model IEnumerable<KayuSushi.Models.Article>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Article</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Image</th>
+            <th>Dispo</th>
+            <th>Catégorie</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <strong>@item.NomArticle</strong>
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                <span class="badge bg-success">@item.Prix.ToString("0.000") DT</span>
+            </td>
+            <td>
+                <img src="@item.ImageUrl" alt="img" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3188/3188219.png';" />
+            </td>
+            <td>
+                <i class="bi @(item.Disponible ? "bi-check-circle-fill text-success" : "bi-x-circle-fill text-danger")"></i>
+            </td>
+            <td>
+                @item.Categorie?.NomCategorie
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a asp-action="Edit" asp-route-id="@item.IdArticle" class="btn btn-warning btn-sm">Modifier</a>
+                    <a asp-action="Details" asp-route-id="@item.IdArticle" class="btn btn-info btn-sm">Détails</a>
+                    <a asp-action="Delete" asp-route-id="@item.IdArticle" class="btn btn-danger btn-sm">Supprimer</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

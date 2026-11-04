@@ -1,0 +1,10 @@
+﻿@model KayuSushi.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Inscription";
+    Layout = null;
+    ViewData["IsRegister"] = true;
+}
+
+@* We reuse the Login view but set IsRegister to true to show the register panel by default *@
+@Html.Partial("Login", new KayuSushi.ViewModels.LoginViewModel { Email = Model?.Email })

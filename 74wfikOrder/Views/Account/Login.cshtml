@@ -1,0 +1,153 @@
+﻿@model KayuSushi.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Connexion";
+    Layout = null;
+    var isRegister = ViewData["IsRegister"] as bool? ?? false;
+}
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KAYU SUSHI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="auth-page">
+        <!-- Left Side: Hero -->
+        <div class="auth-hero">
+            <div class="hero-content">
+                <span class="hero-badge">L'excellence Culinaire</span>
+                <h1>Savourez la <span>Rapidité</span>.</h1>
+                <p>Commandez vos plats tunisiens préférés et suivez votre livraison en temps réel avec notre nouvelle interface premium.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Auth Forms -->
+        <div class="auth-panel">
+            <div class="auth-card">
+                <a asp-controller="Home" asp-action="Index" class="auth-logo">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3188/3188219.png" alt="Logo" />
+                    <span>KAYU SUSHI</span>
+                </a>
+
+                <div class="auth-tabs">
+                    <div class="tab-indicator @(isRegister ? "register" : "")"></div>
+                    <button class="auth-tab @(isRegister ? "" : "active")" data-tab="login">Connexion</button>
+                    <button class="auth-tab @(isRegister ? "active" : "")" data-tab="register">Inscription</button>
+                </div>
+
+                <!-- Login Panel -->
+                <div id="login-panel" class="auth-form-panel @(isRegister ? "hidden" : "")">
+                    <h2 class="auth-title">Bon retour !</h2>
+                    <p class="auth-subtitle">Entrez vos identifiants pour accéder à votre compte.</p>
+
+                    @if (ViewBag.ErrorMessage != null && !isRegister)
+                    {
+                        <div class="alert alert-danger rounded-4 border-0 bg-danger bg-opacity-10 text-danger" style="font-size: 0.9rem;">
+                            <i class="bi bi-exclamation-circle me-2"></i> @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form id="login-form" asp-action="Login" method="post">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-envelope input-icon"></i>
+                                <input name="Email" type="email" placeholder="nom@exemple.com" value="@Model?.Email" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mot de passe</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-lock input-icon"></i>
+                                <input name="Password" type="password" placeholder="••••••••" required />
+                                <button type="button" class="password-toggle">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-submit">
+                            Se connecter <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </form>
+                    <div class="auth-footer">
+                        Nouveau ici ? <button onclick="switchTab('register')">Créer un compte</button>
+                    </div>
+                </div>
+
+                <!-- Register Panel (Simplified link for JS switching) -->
+                <div id="register-panel" class="auth-form-panel @(isRegister ? "" : "hidden")">
+                    <h2 class="auth-title">Bienvenue !</h2>
+                    <p class="auth-subtitle">Créez votre compte pour commencer à commander.</p>
+
+                    <form id="register-form" asp-action="Register" method="post">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Prénom</label>
+                                    <div class="input-wrapper">
+                                        <input name="Prenom" placeholder="Prénom" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <div class="input-wrapper">
+                                        <input name="Nom" placeholder="Nom" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-envelope input-icon"></i>
+                                <input name="Email" type="email" placeholder="votre@email.com" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mot de passe</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-lock input-icon"></i>
+                                <input id="reg-password" name="Password" type="password" placeholder="••••••••" required />
+                            </div>
+                            <div class="strength-meter">
+                                <div class="strength-bar-track"><div class="strength-bar-fill"></div></div>
+                                <div class="strength-label"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmer</label>
+                            <div class="input-wrapper">
+                                <input name="ConfirmPassword" type="password" placeholder="••••••••" required />
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-submit">
+                            S'inscrire <i class="bi bi-check-circle ms-1"></i>
+                        </button>
+                    </form>
+                    <div class="auth-footer">
+                        Déjà inscrit ? <button onclick="switchTab('login')">Se connecter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    <script>
+        // Theme initialization
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>

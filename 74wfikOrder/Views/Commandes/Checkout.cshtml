@@ -1,0 +1,120 @@
+﻿@model KayuSushi.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Validation de la commande";
+}
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <h2 class="fw-bold mb-4">Détails de livraison</h2>
+            <div class="card border-0 shadow-lg" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-radius: 1.5rem;">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Checkout" method="post">
+                        <input type="hidden" asp-for="DeliveryLatitude" id="DeliveryLatitude" />
+                        <input type="hidden" asp-for="DeliveryLongitude" id="DeliveryLongitude" />
+                        <div class="mb-4">
+                            <label asp-for="AdresseLivraison" class="form-label fw-bold text-secondary"></label>
+                            <input asp-for="AdresseLivraison" class="form-control form-control-lg bg-light" placeholder="Ex: 123 Rue de la République" />
+                            <span asp-validation-for="AdresseLivraison" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-4 mb-md-0">
+                                <label asp-for="VilleLivraison" class="form-label fw-bold text-secondary"></label>
+                                <input asp-for="VilleLivraison" class="form-control form-control-lg bg-light" placeholder="Ex: Sfax" />
+                                <span asp-validation-for="VilleLivraison" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="TelephoneLivraison" class="form-label fw-bold text-secondary"></label>
+                                <input asp-for="TelephoneLivraison" class="form-control form-control-lg bg-light" placeholder="Ex: 22 123 456" />
+                                <span asp-validation-for="TelephoneLivraison" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Remarques" class="form-label fw-bold text-secondary"></label>
+                            <textarea asp-for="Remarques" class="form-control bg-light" rows="3" placeholder="Informations supplémentaires (code porte, étage, etc.)"></textarea>
+                            <span asp-validation-for="Remarques" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-success btn-lg fw-bold rounded-pill shadow-sm">
+                                Confirmer la commande
+                            </button>
+                            <a asp-controller="Panier" asp-action="Index" class="btn btn-outline-secondary rounded-pill">
+                                Retour au panier
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 2rem; background: rgba(248, 249, 250, 0.9); border-radius: 1.5rem;">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-4">Résumé de la commande</h3>
+                    
+                    <div class="d-flex flex-column gap-3 mb-4" style="max-height: 350px; overflow-y: auto;">
+                        @foreach (var item in Model.ItemsPanier)
+                        {
+                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="position-relative">
+                                        <img src="@item.Article?.ImageUrl" alt="@item.Article?.NomArticle" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.onerror=null;this.src='/images/hero/hero-tunisian-fastfood-spread.png';"/>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            @item.Quantite
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">@item.Article?.NomArticle</h6>
+                                        <small class="text-muted">@item.Article?.Prix.ToString("0.000") DT x @item.Quantite</small>
+                                    </div>
+                                </div>
+                                <span class="fw-bold">@((item.Article?.Prix * item.Quantite)?.ToString("0.000")) DT</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Sous-total</span>
+                        <span>@Model.Total.ToString("0.000") DT</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Frais de livraison</span>
+                        <span class="text-success">Gratuit</span>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fs-5 fw-bold">Total</span>
+                        <span class="fs-3 fw-bold text-success">@Model.Total.ToString("0.000") DT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        document.getElementById('DeliveryLatitude').value = position.coords.latitude;
+                        document.getElementById('DeliveryLongitude').value = position.coords.longitude;
+                        console.log("Location captured:", position.coords.latitude, position.coords.longitude);
+                    },
+                    function(error) {
+                        console.warn("Geolocation denied or failed:", error.message);
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            }
+        });
+    </script>
+}

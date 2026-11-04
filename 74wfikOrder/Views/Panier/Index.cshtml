@@ -1,0 +1,143 @@
+﻿@model IEnumerable<KayuSushi.Models.Panier>
+
+@{
+    ViewData["Title"] = "Mon panier";
+    decimal total = ViewBag.Total ?? 0;
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">Mon panier</h1>
+            <p class="text-muted mb-0">
+                Vérifiez vos articles avant de passer la commande.
+            </p>
+        </div>
+
+        <a asp-controller="Menu" asp-action="Index" class="btn btn-outline-primary">
+            Retour au menu
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info shadow-sm">
+            Votre panier est vide. Retournez au menu pour choisir vos repas.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                @foreach (var item in Model)
+                {
+                    var article = item.Article;
+                    var sousTotal = article != null ? article.Prix * item.Quantite : 0;
+
+                    <div class="card mb-3 shadow-sm border-0">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="@article?.ImageUrl"
+                                     class="img-fluid rounded-start h-100"
+                                     style="object-fit: cover; min-height: 190px;"
+                                     alt="@article?.NomArticle"
+                                     onerror="this.onerror=null;this.src='/images/hero/hero-tunisian-fastfood-spread.png';" />
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <span class="badge bg-warning text-dark mb-2">
+                                                @article?.Categorie?.NomCategorie
+                                            </span>
+
+                                            <h4 class="card-title fw-bold">
+                                                @article?.NomArticle
+                                            </h4>
+
+                                            <p class="text-muted">
+                                                @article?.Description
+                                            </p>
+                                        </div>
+
+                                        <a asp-action="Supprimer"
+                                           asp-route-id="@item.IdPanier"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Supprimer
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <strong>Prix unitaire :</strong>
+                                            @article?.Prix.ToString("0.000") DT
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a asp-action="Diminuer"
+                                               asp-route-id="@item.IdPanier"
+                                               class="btn btn-outline-secondary btn-sm">
+                                                -
+                                            </a>
+
+                                            <span class="fw-bold px-2">
+                                                @item.Quantite
+                                            </span>
+
+                                            <a asp-action="Augmenter"
+                                               asp-route-id="@item.IdPanier"
+                                               class="btn btn-outline-secondary btn-sm">
+                                                +
+                                            </a>
+                                        </div>
+
+                                        <div>
+                                            <strong>Sous-total :</strong>
+                                            <span class="text-success fw-bold">
+                                                @sousTotal.ToString("0.000") DT
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow border-0 sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <h4 class="fw-bold mb-3">Résumé</h4>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total articles</span>
+                            <strong>@Model.Sum(p => p.Quantite)</strong>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="fs-5">Total à payer</span>
+                            <strong class="fs-4 text-success">
+                                @total.ToString("0.000") DT
+                            </strong>
+                        </div>
+
+                        <a asp-controller="Commandes"
+                           asp-action="Checkout"
+                           class="btn btn-success w-100 mb-2">
+                            Passer la commande
+                        </a>
+
+                        <a asp-action="Vider"
+                           class="btn btn-outline-danger w-100">
+                            Vider le panier
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<KayuSushi.Models.CommandeFournisseur>
+
+@{
+    ViewData["Title"] = "Commandes Fournisseurs";
+}
+
+<div class="page-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Commandes Automatiques</h1>
+            <p class="text-muted mb-0">Historique des commandes générées automatiquement par le système.</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Retour aux stocks
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Aucune commande fournisseur n'a été passée.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Fournisseur</th>
+                        <th>Ingrédient</th>
+                        <th>Quantité</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.IdCommandeFournisseur</td>
+                            <td>@item.DateCommande.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="fw-bold">@item.Fournisseur?.Nom</td>
+                            <td>@item.Ingredient?.Nom</td>
+                            <td><strong>@item.QuantiteCommandee.ToString("0.##") @item.Ingredient?.Unite</strong></td>
+                            <td>
+                                @if (item.Statut == "En attente")
+                                {
+                                    <span class="badge bg-warning"><i class="bi bi-clock"></i> En attente</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-box-seam"></i> @item.Statut</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Statut == "En attente")
+                                {
+                                    <form asp-action="MarquerReçue" asp-route-id="@item.IdCommandeFournisseur" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            Marquer Reçue & Mettre à jour le stock
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

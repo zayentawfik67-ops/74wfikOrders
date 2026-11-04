@@ -1,0 +1,118 @@
+﻿@model IEnumerable<KayuSushi.Models.Commande>
+
+@{
+    ViewData["Title"] = "Gestion des commandes";
+}
+
+<div class="page-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Gestion des commandes</h1>
+            <p class="text-muted mb-0">Liste des commandes passées par les clients.</p>
+        </div>
+
+        <a asp-controller="Home" asp-action="Admin" class="btn btn-outline-secondary">
+            Retour dashboard
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Aucune commande pour le moment.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Statut</th>
+                        <th>Articles</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var commande in Model)
+                    {
+                        <tr>
+                            <td>#@commande.IdCommande</td>
+
+                            <td>
+                                @commande.Client?.Prenom @commande.Client?.Nom
+                            </td>
+
+                            <td>
+                                @commande.DateCommande.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                <strong class="text-success">
+                                    @commande.Total.ToString("0.000") DT
+                                </strong>
+                            </td>
+
+                            <td>
+                                @if (commande.Statut == "Confirmée")
+                                {
+                                    <span class="badge bg-success">@commande.Statut</span>
+                                }
+                                else if (commande.Statut == "Annulée")
+                                {
+                                    <span class="badge bg-danger">@commande.Statut</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">@commande.Statut</span>
+                                }
+                            </td>
+
+                            <td>
+                                @commande.LignesCommande.Sum(l => l.Quantite)
+                            </td>
+
+                            <td class="text-end">
+                                @if (commande.Statut != "Livrée" && commande.Statut != "Annulée")
+                                {
+                                    <a asp-action="Tracking"
+                                       asp-route-id="@commande.IdCommande"
+                                       class="btn btn-sm btn-info text-white me-1">
+                                        Suivre
+                                    </a>
+                                }
+                                <a asp-action="Details"
+                                   asp-route-id="@commande.IdCommande"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Détails
+                                </a>
+
+                                @if (commande.Statut == "En attente")
+                                {
+                                    <a asp-action="ChangerStatut"
+                                       asp-route-id="@commande.IdCommande"
+                                       asp-route-statut="Confirmée"
+                                       class="btn btn-sm btn-success">
+                                        Confirmer
+                                    </a>
+
+                                    <a asp-action="ChangerStatut"
+                                       asp-route-id="@commande.IdCommande"
+                                       asp-route-statut="Annulée"
+                                       class="btn btn-sm btn-outline-danger">
+                                        Annuler
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
